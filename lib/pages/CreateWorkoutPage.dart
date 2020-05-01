@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:power_log/common/exercise_row.dart';
+import 'package:power_log/pages/AddExercisePage.dart';
 
 class CreateWorkoutPage extends StatefulWidget {
   @override
@@ -93,7 +94,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: _addExercisePage,
                 ),
               )
             ]),
@@ -117,5 +118,14 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
         selectedDate = picked;
         dateTxt.text = selectedDate.toIso8601String();
       });
+  }
+
+
+  void _addExercisePage(){
+    print("_addExercisePage..");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddExercisePage()),
+    );
   }
 }
