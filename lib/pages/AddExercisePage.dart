@@ -1,5 +1,10 @@
 
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:power_log/models/Exercise.dart';
+import 'package:power_log/models/Exercises.dart';
+import 'dart:convert';
 
 class AddExercisePage extends StatefulWidget {
 
@@ -11,97 +16,13 @@ class AddExercisePage extends StatefulWidget {
 class _AddExercisePage extends State<AddExercisePage> {
   Map<String, bool> _selectionMap = {};
   List<dynamic> selectedExercises = [];
+  Map<String,List<Exercise>> exerciseList = {};
 
-  var exerciseList = [
-    {
-      "services": [
-        {
-          "service_group_id": 22,
-          "service_category": "W",
-          "name": "Leg Curl",
-          "id": 229
-        },        {
-          "service_group_id": 22,
-          "service_category": "W",
-          "name": "Leg Press",
-          "id": 229
-        },        {
-          "service_group_id": 22,
-          "service_category": "W",
-          "name": "Barbell Squat",
-          "id": 229
-        },
-      ],
-      "name": "Legs",
-      "is_active": false,
-      "id": 22
-    },
-    {
-      "services": [
-        {
-          "service_group_id": 22,
-          "service_category": "B",
-          "name": "Barbell Bench Press",
-          "id": 228
-        },
-        {
-          "service_group_id": 22,
-          "service_category": "W",
-          "name": "Dumbell Bench Press",
-          "id": 229
-        },        {
-          "service_group_id": 22,
-          "service_category": "W",
-          "name": "Smartbell Bench Press",
-          "id": 229
-        },        {
-          "service_group_id": 22,
-          "service_category": "W",
-          "name": "Barbell Floor Press",
-          "id": 229
-        },        {
-          "service_group_id": 22,
-          "service_category": "W",
-          "name": "Incline Barbell Bench Press",
-          "id": 229
-        },
-      ],
-      "name": "Chest",
-      "is_active": false,
-      "id": 22
-    },
-    {
-      "services": [
-        {
-          "service_group_id": 19,
-          "service_category": "B",
-          "name": "Barbell Deadlist",
-          "id": 193
-        },
-        {
-          "service_group_id": 19,
-          "service_category": "B",
-          "name": "Barbell Row",
-          "id": 194
-        },
-        {
-          "service_group_id": 19,
-          "service_category": "B",
-          "name": "Rack Pull",
-          "id": 194
-        },
-        {
-          "service_group_id": 19,
-          "service_category": "B",
-          "name": "Lat Pulldown",
-          "id": 194
-        }
-      ],
-      "name": "Back",
-      "is_active": false,
-      "id": 19
-    }
-  ];
+  @override
+  void initState() {
+    _loadJson();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,21 +34,21 @@ class _AddExercisePage extends State<AddExercisePage> {
             child: ListView.builder(
               shrinkWrap: false,
               padding: const EdgeInsets.all(8.0),
-              itemCount: exerciseList.length,
+              itemCount: exerciseList.keys.length,
               itemBuilder: (BuildContext context, int index) {
-                var item = exerciseList[index]; // should be outside build function
-                List items = item['services']; // should be outside build function
+                var groupNames = exerciseList.keys.toList();
+                var groupList = exerciseList[groupNames[index]].toList(); // should be outside build function
                 return ExpansionTile(
-                  title: Text(item['name']),
-                  children: List.generate(items.length, (i) {
-                    _selectionMap[items[i]['name']] =
-                        _selectionMap[items[i]['name']] ?? item['is_active'];
+                  title: Text(groupNames[index]),
+                  children: List.generate(groupList.length, (i) {
+                    _selectionMap[groupList[i].description] =
+                        _selectionMap[groupList[i].description] ?? false;
                     return CheckboxListTile(
-                      title: Text(items[i]['name']),
-                      value: _selectionMap[items[i]['name']],
+                      title: Text(groupList[i].description),
+                      value: _selectionMap[groupList[i].description],
                       onChanged: (val) {
                         setState(() {
-                          _selectionMap[items[i]['name']] = val;
+                          _selectionMap[groupList[i].description] = val;
                           _updateList();
                         });
                       },
@@ -165,7 +86,28 @@ class _AddExercisePage extends State<AddExercisePage> {
 
   void _sendList(){
     print(selectedExercises);
-    Navigator.pop(context);
+    Navigator.pop(context, selectedExercises);
+  }
+
+  _loadJson() async {
+    String data = await DefaultAssetBundle.of(context).loadString('lib/assets/data/exercises.json');
+    Map<String,dynamic> parsedJson = json.decode(data);
+
+
+    Map<String,dynamic> exerciseGroups = parsedJson['exercises'];
+    for (var entry in exerciseGroups.keys.toList()){
+      Exercises exercisesGroups = Exercises.fromJson(parsedJson,entry);
+      List<Exercise> exercises = [];
+
+      for (Map<String,dynamic> json in exercisesGroups.group)
+        exercises.add(Exercise.fromJson(json));
+      exerciseList.addAll({entry.toString():exercises});
+    }
+
+    setState(() {
+
+
+    });
   }
 
 }

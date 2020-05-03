@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:power_log/common/exercise_row.dart';
 import 'package:power_log/pages/AddExercisePage.dart';
 
@@ -11,10 +12,12 @@ class CreateWorkoutPage extends StatefulWidget {
 class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   var dateTxt = TextEditingController();
   static const padding_column_title = 24.0;
+  var selectedExercises = [];
+  static const body_padding = 18.0;
 
   @override
   void initState() {
-    dateTxt.text = selectedDate.toIso8601String();
+    dateTxt.text = DateFormat('MMMM dd yyyy').format(selectedDate);
 
     super.initState();
   }
@@ -22,84 +25,101 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Add a Workout"),
-          leading: IconButton(
-            icon: Icon(Icons.close, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+      appBar: AppBar(
+        title: Text("Add a Workout"),
+        leading: IconButton(
+          icon: Icon(Icons.close, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(children: [
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(body_padding),
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Padding(
-                padding: const EdgeInsets.only(top: 32.0, right: 8.0, left: 8.0, bottom:8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintStyle:
-                                TextStyle(fontSize: 20.0, color: Colors.black45),
-                            border: OutlineInputBorder(),
-                            hintText: "Workout name",
-                            fillColor: Colors.blueGrey),
-                      ),
-                    ),
-                  ],
-                ),
+                padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                child: Text("Workout Name",
+                    style: TextStyle(fontSize: 18, color: Colors.black54)),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: TextFormField(
-                          controller: dateTxt,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                              hintStyle: TextStyle(
-                                  fontSize: 20.0, color: Colors.black45),
-                              prefixIcon: Icon(Icons.calendar_today),
-                              border: OutlineInputBorder(),
-                              hintText: "Date",
-                              fillColor: Colors.blueGrey),
-                          onTap: () => _selectDate(context)),
-                    ),
-                  ],
-                ),
-              ),
-              ExerciseRow(
-                  exerciseId: "test123"
-              ),
-              ExerciseRow(
-                  exerciseId: "test113"
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: padding_column_title),
-                child: RaisedButton(
-                  color: Colors.deepOrange,
-                  splashColor: Colors.yellow[200],
-                  animationDuration: Duration(seconds: 1),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 24.0, left: 32.0, right: 32.0, bottom: 24.0),
-                    child: Text(
-                      "Add Exercise",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width-body_padding*2,
+                    child: TextField(
+                      decoration: InputDecoration(
+                          hintStyle:
+                              TextStyle(fontSize: 20.0, color: Colors.black45),
+                          border: OutlineInputBorder(),
+                          hintText: "Workout name",
+                          fillColor: Colors.blueGrey),
                     ),
                   ),
-                  onPressed: _addExercisePage,
-                ),
-              )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                child: Text("Date",
+                style : TextStyle(fontSize: 18, color: Colors.black54)),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width-body_padding*2,
+                    child: TextFormField(
+                        controller: dateTxt,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                                fontSize: 20.0, color: Colors.black45),
+                            prefixIcon: Icon(Icons.calendar_today),
+                            border: OutlineInputBorder(),
+                            hintText: "Date",
+                            fillColor: Colors.blueGrey),
+                        onTap: () => _selectDate(context)),
+                  ),
+                ],
+              ),
+              Expanded(
+                  child: selectedExercises.length != 0
+                      ? ListView.builder(
+                          shrinkWrap: false,
+                          physics: ClampingScrollPhysics(),
+                          padding: const EdgeInsets.all(8.0),
+                          itemCount: selectedExercises.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var exercise;
+                            if (selectedExercises.length != 0)
+                              exercise = selectedExercises[index];
+                            return selectedExercises.length != 0
+                                ? ExerciseRow(exerciseId: exercise)
+                                : Text("Add some exercises");
+                          },
+                        )
+                      : Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: Text("Add some exercises",
+                              style: TextStyle(
+                                  fontSize: 24, color: Colors.black54)),
+                        )),
             ]),
+      ),
+      bottomNavigationBar: RaisedButton(
+        color: Colors.deepOrange,
+        splashColor: Colors.yellow[200],
+        animationDuration: Duration(seconds: 1),
+        child: Padding(
+          padding: const EdgeInsets.only(
+              top: 24.0, left: 8.0, right: 8.0, bottom: 24.0),
+          child: Text(
+            "Add Exercise",
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
-        ));
+        ),
+        onPressed: _addExercisePage,
+      ),
+    );
   }
 
   DateTime selectedDate = DateTime.now();
@@ -116,16 +136,22 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        dateTxt.text = selectedDate.toIso8601String();
+        dateTxt.text = DateFormat('MMMM dd yyyy').format(selectedDate);
       });
   }
 
-
-  void _addExercisePage(){
+  Future<void> _addExercisePage() async {
     print("_addExercisePage..");
-    Navigator.push(
+    var result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AddExercisePage()),
     );
+
+    setState(() {
+      selectedExercises = result;
+    });
+
+    print("result from add exercise page: ");
+    print(result);
   }
 }

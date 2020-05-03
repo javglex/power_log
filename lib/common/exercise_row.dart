@@ -24,7 +24,7 @@ class _ExerciseRow extends State<ExerciseRow> {
             children: <Widget>[
               Row(children: [
                 Expanded(
-                    child: Text("Exercise: " + widget.exerciseId)
+                    child: Text(widget.exerciseId)
                 ),
                 InkWell(
                   onTap: ()=>{},

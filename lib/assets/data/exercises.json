@@ -1,0 +1,89 @@
+{
+  "exercises": {
+    "chest": [
+      {
+        "id" :  1,
+        "description" : "Barbell Bench Press",
+        "categoryId" : 1
+      },
+      {
+        "id" :  2,
+        "description" : "Dumbbell Bench Press",
+        "categoryId" : 1
+      },
+      {
+        "id" :  3,
+        "description" : "Barbell Floor Press",
+        "categoryId" : 1
+      },
+      {
+        "id" :  4,
+        "description" : "Incline Barbell Bench Press",
+        "categoryId" : 1
+      },
+      {
+        "id" :  5,
+        "description" : "Incline Dumbbell Bench Press",
+        "categoryId" : 1
+      }
+    ],
+    "back": [
+      {
+        "id" :  6,
+        "description" : "Barbell Deadlift",
+        "categoryId" : 2
+      },
+      {
+        "id" :  7,
+        "description" : "Dimmel Deadlift",
+        "categoryId" : 2
+      },
+      {
+        "id" :  8,
+        "description" : "Barbell Row",
+        "categoryId" : 2
+      },
+      {
+        "id" :  9,
+        "description" : "Rack Pull",
+        "categoryId" : 2
+      },
+      {
+        "id" :  10,
+        "description" : "Lat Pulldown",
+        "categoryId" : 2
+      }
+
+    ],
+    "legs": [
+      {
+        "id" :  11,
+        "description" : "Barbell Squat",
+        "categoryId" : 3
+      },
+      {
+        "id" :  12,
+        "description" : "Barbell Good Morning",
+        "categoryId" : 3
+      },
+      {
+        "id" :  13,
+        "description" : "Leg Press",
+        "categoryId" : 3
+      },
+      {
+        "id" :  14,
+        "description" : "Leg Extension",
+        "categoryId" : 3
+      },
+      {
+        "id" :  15,
+        "description" : "Leg Curl",
+        "categoryId" : 3
+      }
+
+    ]
+  }
+
+
+}
