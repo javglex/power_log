@@ -1,3 +1,9 @@
+/**
+ * Holds a single Exercise.
+ * An Exercise will include information about
+ * it's ID, it's description (workout name) and categoryID (muscle group it belongs to)
+ */
+
 class Exercise {
   final int id;
   final String description;

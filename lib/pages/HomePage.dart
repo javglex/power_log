@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:power_log/common/exercise_row.dart';
+import 'package:power_log/common/record_row.dart';
+import 'package:power_log/models/ExerciseRecord.dart';
+import 'package:power_log/services/exercise_service.dart';
 
 import 'CreateWorkoutPage.dart';
 
@@ -14,6 +18,17 @@ class HomePage extends StatefulWidget {
 
 
 class _HomePageState extends State<HomePage> {
+
+  List<ExerciseRecord> records;
+  ExerciseService exerciseService;
+  @override
+  void initState(){
+    exerciseService = ExerciseService(context);
+    records = exerciseService.getExerciseRecordList();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +36,34 @@ class _HomePageState extends State<HomePage> {
           title: Text("Workout Log"),
         ),
         body: Center(
+          child: Column(
+            children: [
+              Expanded(
+                  child: records.length != 0
+                      ? ListView.builder(
+                    shrinkWrap: false,
+                    physics: ClampingScrollPhysics(),
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: records.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var recordid;
+                      if (records.length != 0)
+                        recordid = records[index].id;
 
+                      return records.length != 0
+                          ? RecordRow(exerciseId: recordid)
+                          : Text("Add some workouts");
+                    },
+                  )
+                      : Padding(
+                    padding: EdgeInsets.all(32.0),
+                    child: Text("Add some workouts",
+                        style: TextStyle(
+                            fontSize: 24, color: Colors.black54)),
+                  )
+              ),
+            ]
+          ),
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: _createWorkoutPage,

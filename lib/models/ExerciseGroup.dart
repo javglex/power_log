@@ -1,5 +1,12 @@
 import 'Exercise.dart';
 
+
+/**
+ * Exercises holds a list of exercises by group. For example,
+ * if the groupname is chest, and the group list will include exercises
+ * that fall under that group
+ */
+
 class Exercises {
   final List<dynamic> group;
   final String groupName;

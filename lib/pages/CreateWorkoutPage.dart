@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:power_log/common/exercise_row.dart';
+import 'package:power_log/models/ExerciseRecord.dart';
 import 'package:power_log/pages/AddExercisePage.dart';
+import 'package:power_log/services/exercise_service.dart';
 
 class CreateWorkoutPage extends StatefulWidget {
   @override
@@ -12,12 +14,16 @@ class CreateWorkoutPage extends StatefulWidget {
 class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   var dateTxt = TextEditingController();
   static const padding_column_title = 24.0;
-  var selectedExercises = [];
+  List<int> selectedExercises = [];
+  List<ExerciseRecord> exerciseRecords = [];
   static const body_padding = 18.0;
+  ExerciseService exerciseService;
 
   @override
   void initState() {
     dateTxt.text = DateFormat('MMMM dd yyyy').format(selectedDate);
+    exerciseService = ExerciseService(context);
+
 
     super.initState();
   }
@@ -82,27 +88,31 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
                 ],
               ),
               Expanded(
-                  child: selectedExercises.length != 0
+                  child: selectedExercises != null && selectedExercises.length!=0
                       ? ListView.builder(
                           shrinkWrap: false,
                           physics: ClampingScrollPhysics(),
                           padding: const EdgeInsets.all(8.0),
-                          itemCount: selectedExercises.length,
+                          itemCount: exerciseRecords.length,
                           itemBuilder: (BuildContext context, int index) {
-                            var exercise;
-                            if (selectedExercises.length != 0)
-                              exercise = selectedExercises[index];
+                            var recordid;
+                            if (exerciseRecords.length != 0)
+                              recordid = exerciseRecords[index].exerciseid;
+
                             return selectedExercises.length != 0
-                                ? ExerciseRow(exerciseId: exercise)
+                                ? ExerciseRow(exerciseId: recordid, callback: (record)=> _exerciseRecordAdded(record,index))
                                 : Text("Add some exercises");
                           },
                         )
                       : Padding(
                           padding: EdgeInsets.all(32.0),
-                          child: Text("Add some exercises",
-                              style: TextStyle(
-                                  fontSize: 24, color: Colors.black54)),
-                        )),
+                          child: Center(
+                            child: Text("Add some exercises",
+                                style: TextStyle(
+                                    fontSize: 24, color: Colors.black54)),
+                          ),
+                        )
+              ),
             ]),
       ),
       bottomNavigationBar: RaisedButton(
@@ -113,11 +123,16 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
           padding: const EdgeInsets.only(
               top: 24.0, left: 8.0, right: 8.0, bottom: 24.0),
           child: Text(
-            "Add Exercise",
+            "Done",
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
-        onPressed: _addExercisePage,
+        onPressed: _finishAdding,
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: _addExercisePage,
+          child: Icon(Icons.note_add),
+          backgroundColor: Colors.blueGrey
       ),
     );
   }
@@ -140,18 +155,42 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
       });
   }
 
+  _exerciseRecordAdded(ExerciseRecord record, int index){
+    print("createworkoutpage added : ");
+    print(record);
+    print("with id: " + index.toString());
+    exerciseRecords[index] = record;
+  }
+
   Future<void> _addExercisePage() async {
     print("_addExercisePage..");
-    var result = await Navigator.push(
+    List<int> result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AddExercisePage()),
     );
 
     setState(() {
       selectedExercises = result;
+      _createExerciseHistories();
     });
 
     print("result from add exercise page: ");
     print(result);
+  }
+
+  _finishAdding(){
+    //update the exercise service with the finalized record edits
+
+    exerciseService.addExerciseRecordsToList(exerciseRecords);
+
+    Navigator.pop(context);
+  }
+
+  _createExerciseHistories(){
+    for (int id in selectedExercises){
+      ExerciseRecord exerciseRecord = new ExerciseRecord(workoutid: "1231231",exerciseid: id );
+      exerciseRecords.add(exerciseRecord);
+    }
+
   }
 }
