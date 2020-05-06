@@ -1,6 +1,6 @@
 {
   "exercises": {
-    "chest": [
+    "Chest": [
       {
         "id" :  1,
         "description" : "Barbell Bench Press",
@@ -27,7 +27,7 @@
         "categoryId" : 1
       }
     ],
-    "back": [
+    "Back": [
       {
         "id" :  6,
         "description" : "Barbell Deadlift",
@@ -55,7 +55,7 @@
       }
 
     ],
-    "legs": [
+    "Legs": [
       {
         "id" :  11,
         "description" : "Barbell Squat",

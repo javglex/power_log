@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:power_log/common/exercise_row.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
+import 'package:power_log/models/WorkoutRecord.dart';
 import 'package:power_log/pages/AddExercisePage.dart';
+import 'package:power_log/services/exercise_record_service.dart';
 import 'package:power_log/services/exercise_service.dart';
+import 'package:power_log/services/workout_service.dart';
 
 class CreateWorkoutPage extends StatefulWidget {
   @override
@@ -12,20 +15,45 @@ class CreateWorkoutPage extends StatefulWidget {
 }
 
 class _CreateWorkoutPage extends State<CreateWorkoutPage> {
-  var dateTxt = TextEditingController();
+  var dateTxtCtrl = TextEditingController();
+  var nameTxtCtrl = TextEditingController();
+
   static const padding_column_title = 24.0;
+  static const body_padding = 18.0;
+
   List<int> selectedExercises = [];
   List<ExerciseRecord> exerciseRecords = [];
-  static const body_padding = 18.0;
-  ExerciseService exerciseService;
+  ExerciseRecordService exerciseRecordService;
+  WorkoutRecordService workoutRecordService;
+  WorkoutRecord newWorkoutRecord;
+
+  DateTime selectedDate = DateTime.now();
+  String workoutNameText = "";
 
   @override
   void initState() {
-    dateTxt.text = DateFormat('MMMM dd yyyy').format(selectedDate);
-    exerciseService = ExerciseService(context);
+    dateTxtCtrl.text = DateFormat('MMMM dd yyyy').format(selectedDate);
+    exerciseRecordService = ExerciseRecordService(context);
+    workoutRecordService = WorkoutRecordService(context);
 
+    newWorkoutRecord = WorkoutRecord();
+    _addTxtListeners();
 
     super.initState();
+  }
+
+  _addTxtListeners(){
+    nameTxtCtrl.addListener(_nameTxtChanged);
+  }
+
+  _nameTxtChanged(){
+    workoutNameText =  nameTxtCtrl.text;
+  }
+
+  @override
+  void dispose() {
+    nameTxtCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,6 +82,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
                   Container(
                     width: MediaQuery.of(context).size.width-body_padding*2,
                     child: TextField(
+                      controller: nameTxtCtrl,
                       decoration: InputDecoration(
                           hintStyle:
                               TextStyle(fontSize: 20.0, color: Colors.black45),
@@ -74,7 +103,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
                   Container(
                     width: MediaQuery.of(context).size.width-body_padding*2,
                     child: TextFormField(
-                        controller: dateTxt,
+                        controller: dateTxtCtrl,
                         obscureText: false,
                         decoration: InputDecoration(
                             hintStyle: TextStyle(
@@ -127,7 +156,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
-        onPressed: _finishAdding,
+        onPressed: ()=>_finishAdding(context),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: _addExercisePage,
@@ -137,7 +166,6 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
     );
   }
 
-  DateTime selectedDate = DateTime.now();
 
   Future<Null> _selectDate(BuildContext context) async {
     FocusScope.of(context)
@@ -151,7 +179,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        dateTxt.text = DateFormat('MMMM dd yyyy').format(selectedDate);
+        dateTxtCtrl.text = DateFormat('MMMM dd yyyy').format(selectedDate);
       });
   }
 
@@ -178,19 +206,54 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
     print(result);
   }
 
-  _finishAdding(){
+  _finishAdding(BuildContext ctx){
+
+    if (exerciseRecords.length==0){
+      showAlertDialog(ctx,"No exercises","Add exercises before continuing");
+      return;
+    }
+
     //update the exercise service with the finalized record edits
+    exerciseRecordService.addExerciseRecordsToList(exerciseRecords);
+    
+    newWorkoutRecord.date = selectedDate.toIso8601String();
+    if (workoutNameText.length>0 && workoutNameText!='')
+      newWorkoutRecord.name = workoutNameText.trim();
+    else
+      newWorkoutRecord.name = 'Workout#' + DateTime.now().millisecondsSinceEpoch.toString().substring(9);
 
-    exerciseService.addExerciseRecordsToList(exerciseRecords);
-
+    workoutRecordService.addWorkoutRecordToList(newWorkoutRecord);
     Navigator.pop(context);
   }
 
   _createExerciseHistories(){
     for (int id in selectedExercises){
-      ExerciseRecord exerciseRecord = new ExerciseRecord(workoutid: "1231231",exerciseid: id );
+      ExerciseRecord exerciseRecord = new ExerciseRecord(workoutid: newWorkoutRecord.id,exerciseid: id );
       exerciseRecords.add(exerciseRecord);
     }
+  }
 
+  // user defined function
+  Future<void> showAlertDialog(BuildContext ctx, final String message, final String subMessage) async {
+    // flutter defined function
+    return showDialog<void>(
+      context: ctx,
+      builder: (BuildContext ctx) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(message),
+          content: Text(subMessage),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

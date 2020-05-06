@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:power_log/common/exercise_row.dart';
-import 'package:power_log/common/record_row.dart';
+import 'package:power_log/common/wokrout_record_row.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
+import 'package:power_log/models/WorkoutRecord.dart';
+import 'package:power_log/services/exercise_record_service.dart';
 import 'package:power_log/services/exercise_service.dart';
+import 'package:power_log/services/workout_service.dart';
 
 import 'CreateWorkoutPage.dart';
 
@@ -19,12 +22,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  List<ExerciseRecord> records;
-  ExerciseService exerciseService;
+  List<WorkoutRecord> records;
+  WorkoutRecordService workoutRecordService;
   @override
   void initState(){
-    exerciseService = ExerciseService(context);
-    records = exerciseService.getExerciseRecordList();
+    workoutRecordService = WorkoutRecordService(context);
+    records = workoutRecordService.getWorkoutRecordList();
     super.initState();
   }
 
@@ -51,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                         recordid = records[index].id;
 
                       return records.length != 0
-                          ? RecordRow(exerciseId: recordid)
+                          ? RecordRow(workoutId: recordid)
                           : Text("Add some workouts");
                     },
                   )

@@ -1,4 +1,6 @@
-
+/**
+ * Holds available exercises users can select from
+ */
 
 import 'dart:convert';
 import 'dart:math';
@@ -10,7 +12,6 @@ import 'package:power_log/models/ExerciseRecord.dart';
 
 class ExerciseService{
 
-  List<ExerciseRecord> _exerciseHistoryList;
   Map<String,List<Exercise>> _exerciseList;   //available exercises, by group
   BuildContext context;
 
@@ -21,7 +22,6 @@ class ExerciseService{
   factory ExerciseService(BuildContext ctx){
     if (_instance.context==null) {
       _instance.context = ctx;
-      _instance._exerciseHistoryList = List<ExerciseRecord>();
       _instance._exerciseList = Map<String, List<Exercise>>();
     }
     return _instance;
@@ -30,6 +30,10 @@ class ExerciseService{
 
 
   _loadExerciseJson() async {
+
+    if (_exerciseList.values.length>0) //cached version already exists, abort loading
+      return;
+
     String data = await DefaultAssetBundle.of(context).loadString('lib/assets/data/exercises.json');
     Map<String,dynamic> parsedJson = json.decode(data);
 
@@ -69,45 +73,5 @@ class ExerciseService{
     return null;
   }
 
-  
-  void updateExerciseRecord(ExerciseRecord r){
-
-    for (ExerciseRecord record in _exerciseHistoryList){
-      if (r.id==record.id)
-        record=r;
-    }
-
-  }
-  
-  void setExerciseRecordList(List<ExerciseRecord> list){
-    this._exerciseHistoryList = list;
-  }
-
-  void addExerciseRecordToList(ExerciseRecord exerciseRecord){
-    this._exerciseHistoryList.add(exerciseRecord);
-  }
-
-  void addExerciseRecordsToList(List<ExerciseRecord> exerciseRecords){
-    for (ExerciseRecord record in exerciseRecords)
-      this._exerciseHistoryList.add(record);
-  }
-
-  List<ExerciseRecord> getExerciseRecordList(){
-    return this._exerciseHistoryList;
-  }
-
-  ExerciseRecord getExerciseRecordAt(int i){
-    return _exerciseHistoryList.elementAt(i);
-  }
-
-  ExerciseRecord getExerciseRecordById(String id){
-
-    for (ExerciseRecord e in _exerciseHistoryList){
-      if (e.id==id)
-        return e;
-    }
-
-    return null;
-  }
 
 }
