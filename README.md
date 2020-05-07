@@ -7,8 +7,12 @@ This logger is focused for power lifting workouts. That means adding, editing, o
 
 WIP, download links will be available for testing purposes.
 
-![Image of Login](https://github.com/javglex/images/blob/master/Screenshot_1588840202.png)
+## Login Screen
 
-![Image of Home Page](https://github.com/javglex/images/blob/master/Screenshot_1588840280.png)
+<img src="https://github.com/javglex/images/blob/master/Screenshot_1588840202.png" width="400" height="auto">
+## Home Page 
 
-![Image of Detail Screen](https://github.com/javglex/images/blob/master/Screenshot_1588840287.png)
+<img src="https://github.com/javglex/images/blob/master/Screenshot_1588840280.png" width="400" height="auto">
+## Workout Detail Screen
+
+<img src="https://github.com/javglex/images/blob/master/Screenshot_1588840287.png" width="400" height="auto">
