@@ -10,9 +10,11 @@ WIP, download links will be available for testing purposes.
 ## Login Screen
 
 <img src="https://github.com/javglex/images/blob/master/Screenshot_1588840202.png" width="400" height="auto">
+
 ## Home Page 
 
 <img src="https://github.com/javglex/images/blob/master/Screenshot_1588840280.png" width="400" height="auto">
+
 ## Workout Detail Screen
 
 <img src="https://github.com/javglex/images/blob/master/Screenshot_1588840287.png" width="400" height="auto">
