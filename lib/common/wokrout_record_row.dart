@@ -57,44 +57,44 @@ class _RecordRow extends State<RecordRow> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right:20.0),
-            child: Icon(
-              Icons.lens,
-              color: Colors.blue,
-              size: 36.0,
+      child: InkWell(
+        onTap: _openDetailPage,
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right:20.0),
+              child: Icon(
+                Icons.lens,
+                color: Colors.blue,
+                size: 36.0,
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(textFieldName,
-                style: TextStyle(
-                    fontSize: 20.0, color: Colors.black)
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top:4.0),
-                  child: Text(textFieldDate,
-                      style: TextStyle(
-                          fontSize: 16.0, color: Colors.black)
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(textFieldName,
+                  style: TextStyle(
+                      fontSize: 20.0, color: Colors.black)
                   ),
-                )
-              ]
+                  Padding(
+                    padding: const EdgeInsets.only(top:4.0),
+                    child: Text(textFieldDate,
+                        style: TextStyle(
+                            fontSize: 16.0, color: Colors.black)
+                    ),
+                  )
+                ]
+              ),
             ),
-          ),
-          InkWell(
-            onTap: _openDetailPage,
-            child: Icon(
+            Icon(
               Icons.chevron_right,
               color: Colors.blue,
               size: 36.0,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

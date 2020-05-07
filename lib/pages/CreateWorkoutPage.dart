@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:power_log/common/exercise_row.dart';
+import 'package:power_log/common/exercise_edit_row.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
 import 'package:power_log/models/WorkoutRecord.dart';
 import 'package:power_log/pages/AddExercisePage.dart';
@@ -129,7 +129,11 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
                               recordid = exerciseRecords[index].exerciseid;
 
                             return selectedExercises.length != 0
-                                ? ExerciseRow(exerciseId: recordid, callback: (record)=> _exerciseRecordAdded(record,index))
+                                ? ExerciseEditRow(
+                                exerciseId: recordid,
+                                workoutId: newWorkoutRecord.id,
+                                callback: (record)=> _exerciseRecordAdded(record,index)
+                            )
                                 : Text("Add some exercises");
                           },
                         )

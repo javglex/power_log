@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:power_log/common/exercise_row.dart';
+import 'package:power_log/common/exercise_edit_row.dart';
 import 'package:power_log/common/wokrout_record_row.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
 import 'package:power_log/models/WorkoutRecord.dart';
