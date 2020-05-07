@@ -58,13 +58,10 @@ class ExerciseService{
   }
 
   Exercise getExerciseById(int id){
-    print("this shit called" + _exerciseList.length.toString());
 
     for (String group in _exerciseList.keys.toList()){
-      print("group: " + group);
 
       for (Exercise e  in _exerciseList[group]) {
-        print("exercise id: " + e.id.toString() + "search id " + id.toString());
         if (e.id == id)
           return e;
       }

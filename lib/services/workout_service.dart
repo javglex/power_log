@@ -61,4 +61,26 @@ class WorkoutRecordService{
     return null;
   }
 
+  List<WorkoutRecord> getWorkoutRecordsByDate(String date){
+    DateTime searchDateBeg = DateTime.parse(date);
+    DateTime searchDateEnd = DateTime.parse(date);
+    searchDateBeg = new DateTime(searchDateBeg.year, searchDateBeg.month, searchDateBeg.day, 0, 0, 0);
+    searchDateEnd = new DateTime(searchDateEnd.year, searchDateEnd.month, searchDateEnd.day, 23, 59, 59);
+    List<WorkoutRecord> workoutRecords = [];
+    print("workoutservice returned original list size "+_workoutRecordList.length.toString());
+
+    for (WorkoutRecord record in _workoutRecordList){
+      DateTime recordDate = DateTime.parse(record.date);
+      if(recordDate.compareTo(searchDateBeg)==0 || (recordDate.isAfter(searchDateBeg) && recordDate.isBefore(searchDateEnd))) {
+        workoutRecords.add(record);
+        print("workout service searchDateBeg: " + searchDateBeg.toIso8601String()
+            + " enddate: " + searchDateEnd.toIso8601String()
+            + " recordDate: " + recordDate.toIso8601String());
+      }
+
+    }
+    print("workoutservice returned "+workoutRecords.length.toString());
+    return workoutRecords;
+  }
+
 }

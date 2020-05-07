@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_log/common/calendar_component.dart';
 import 'package:power_log/common/exercise_edit_row.dart';
 import 'package:power_log/common/wokrout_record_row.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
@@ -6,6 +7,7 @@ import 'package:power_log/models/WorkoutRecord.dart';
 import 'package:power_log/services/exercise_record_service.dart';
 import 'package:power_log/services/exercise_service.dart';
 import 'package:power_log/services/workout_service.dart';
+import 'package:uuid/uuid.dart';
 
 import 'CreateWorkoutPage.dart';
 
@@ -24,11 +26,27 @@ class _HomePageState extends State<HomePage> {
 
   List<WorkoutRecord> records;
   WorkoutRecordService workoutRecordService;
+  DateTime dateSelected;
   @override
   void initState(){
     workoutRecordService = WorkoutRecordService(context);
-    records = workoutRecordService.getWorkoutRecordList();
+    records = workoutRecordService.getWorkoutRecordsByDate(DateTime.now().toIso8601String());
     super.initState();
+  }
+
+  Future<Null> _dateCallback(DateTime date) async{
+    print("homepage datecallback: "+date.toIso8601String());
+    dateSelected = date;
+
+    List<WorkoutRecord> fetchedRecords =  workoutRecordService.getWorkoutRecordsByDate(dateSelected.toIso8601String());
+
+    setState(() {
+      records = fetchedRecords;
+      if(records.length>0)
+        print(records[0].date + records[0].name);
+    });
+
+
   }
 
 
@@ -41,28 +59,28 @@ class _HomePageState extends State<HomePage> {
         body: Center(
           child: Column(
             children: [
+              CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback),
               Expanded(
                   child: records.length != 0
-                      ? ListView.builder(
+                      ? ListView.separated(
+                    key: Key(DateTime.now().toString()),
                     shrinkWrap: false,
                     physics: ClampingScrollPhysics(),
                     padding: const EdgeInsets.all(8.0),
                     itemCount: records.length,
                     itemBuilder: (BuildContext context, int index) {
-                      var recordid;
-                      if (records.length != 0)
-                        recordid = records[index].id;
-
-                      return records.length != 0
-                          ? RecordRow(workoutId: recordid)
-                          : Text("Add some workouts");
+                      final recordid = records[index]?.id;
+                      return RecordRow(workoutId: recordid);
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(color: Colors.grey,);
                     },
                   )
                       : Padding(
                     padding: EdgeInsets.all(32.0),
-                    child: Text("Add some workouts",
+                    child: Text("No workouts on this day",
                         style: TextStyle(
-                            fontSize: 24, color: Colors.black54)),
+                            fontSize: 24)),
                   )
               ),
             ]
@@ -71,17 +89,20 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
             onPressed: _createWorkoutPage,
             child: Icon(Icons.note_add),
-            backgroundColor: Colors.blueGrey
+            backgroundColor: Colors.grey[300]
         )
     );
   }
 
-  void _createWorkoutPage(){
+  Future<void> _createWorkoutPage() async {
     print("creating workout page..");
-    Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => CreateWorkoutPage()),
     );
+
+    _dateCallback(dateSelected);
+
   }
 
 }

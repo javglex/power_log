@@ -76,13 +76,13 @@ class _RecordRow extends State<RecordRow> {
                 children: [
                   Text(textFieldName,
                   style: TextStyle(
-                      fontSize: 20.0, color: Colors.black)
+                      fontSize: 20.0)
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top:4.0),
                     child: Text(textFieldDate,
                         style: TextStyle(
-                            fontSize: 16.0, color: Colors.black)
+                            fontSize: 16.0)
                     ),
                   )
                 ]
@@ -90,7 +90,7 @@ class _RecordRow extends State<RecordRow> {
             ),
             Icon(
               Icons.chevron_right,
-              color: Colors.blue,
+              color: Colors.blue[200],
               size: 36.0,
             ),
           ],

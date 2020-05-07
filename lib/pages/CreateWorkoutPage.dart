@@ -66,87 +66,90 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(body_padding),
-        child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
-                child: Text("Workout Name",
-                    style: TextStyle(fontSize: 18, color: Colors.black54)),
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width-body_padding*2,
-                    child: TextField(
-                      controller: nameTxtCtrl,
-                      decoration: InputDecoration(
-                          hintStyle:
-                              TextStyle(fontSize: 20.0, color: Colors.black45),
-                          border: OutlineInputBorder(),
-                          hintText: "Workout name",
-                          fillColor: Colors.blueGrey),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
-                child: Text("Date",
-                style : TextStyle(fontSize: 18, color: Colors.black54)),
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width-body_padding*2,
-                    child: TextFormField(
-                        controller: dateTxtCtrl,
-                        obscureText: false,
+      body: Container(
+        height:double.infinity,
+        child: Padding(
+          padding: EdgeInsets.all(body_padding),
+          child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                  child: Text("Workout Name",
+                      style: TextStyle(fontSize: 18)),
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width-body_padding*2,
+                      child: TextField(
+                        controller: nameTxtCtrl,
                         decoration: InputDecoration(
-                            hintStyle: TextStyle(
-                                fontSize: 20.0, color: Colors.black45),
-                            prefixIcon: Icon(Icons.calendar_today),
+                            hintStyle:
+                                TextStyle(fontSize: 20.0),
                             border: OutlineInputBorder(),
-                            hintText: "Date",
+                            hintText: "Workout name",
                             fillColor: Colors.blueGrey),
-                        onTap: () => _selectDate(context)),
-                  ),
-                ],
-              ),
-              Expanded(
-                  child: selectedExercises != null && selectedExercises.length!=0
-                      ? ListView.builder(
-                          shrinkWrap: false,
-                          physics: ClampingScrollPhysics(),
-                          padding: const EdgeInsets.all(8.0),
-                          itemCount: exerciseRecords.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var recordid;
-                            if (exerciseRecords.length != 0)
-                              recordid = exerciseRecords[index].exerciseid;
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                  child: Text("Date",
+                  style : TextStyle(fontSize: 18)),
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width-body_padding*2,
+                      child: TextFormField(
+                          controller: dateTxtCtrl,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              hintStyle: TextStyle(
+                                  fontSize: 20.0),
+                              prefixIcon: Icon(Icons.calendar_today),
+                              border: OutlineInputBorder(),
+                              hintText: "Date",
+                              fillColor: Colors.blueGrey),
+                          onTap: () => _selectDate(context)),
+                    ),
+                  ],
+                ),
+                Expanded(
+                    child: selectedExercises != null && selectedExercises.length!=0
+                        ? ListView.builder(
+                            shrinkWrap: false,
+                            physics: ClampingScrollPhysics(),
+                            padding: const EdgeInsets.all(8.0),
+                            itemCount: exerciseRecords.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var recordid;
+                              if (exerciseRecords.length != 0)
+                                recordid = exerciseRecords[index].exerciseid;
 
-                            return selectedExercises.length != 0
-                                ? ExerciseEditRow(
-                                exerciseId: recordid,
-                                workoutId: newWorkoutRecord.id,
-                                callback: (record)=> _exerciseRecordAdded(record,index)
-                            )
-                                : Text("Add some exercises");
-                          },
-                        )
-                      : Padding(
-                          padding: EdgeInsets.all(32.0),
-                          child: Center(
-                            child: Text("Add some exercises",
-                                style: TextStyle(
-                                    fontSize: 24, color: Colors.black54)),
-                          ),
-                        )
-              ),
-            ]),
+                              return selectedExercises.length != 0
+                                  ? ExerciseEditRow(
+                                  exerciseId: recordid,
+                                  workoutId: newWorkoutRecord.id,
+                                  callback: (record)=> _exerciseRecordAdded(record,index)
+                              )
+                                  : Text("Add some exercises");
+                            },
+                          )
+                        : Padding(
+                            padding: EdgeInsets.all(32.0),
+                            child: Center(
+                              child: Text("Add some exercises",
+                                  style: TextStyle(
+                                      fontSize: 24)),
+                            ),
+                          )
+                ),
+              ]),
+        ),
       ),
       bottomNavigationBar: RaisedButton(
         color: Colors.deepOrange,
@@ -165,7 +168,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
       floatingActionButton: FloatingActionButton(
           onPressed: _addExercisePage,
           child: Icon(Icons.note_add),
-          backgroundColor: Colors.blueGrey
+          backgroundColor: Colors.grey[300]
       ),
     );
   }

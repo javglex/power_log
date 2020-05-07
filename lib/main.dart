@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:power_log/pages/HomePage.dart';
 
-void main() => runApp(MyApp());
+import 'package:intl/date_symbol_data_local.dart';
+
+void main() {
+  initializeDateFormatting().then((_) => runApp(MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -9,19 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData(brightness: Brightness.dark),
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.deepOrange,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+          primarySwatch: Colors.deepOrange,
+          brightness: Brightness.light,
+          hintColor: Colors.cyan),
+      home: MyHomePage(title: 'PowerLog'),
     );
   }
 }
@@ -45,118 +43,130 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Colors.deepOrange[800],
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Center(child: Text(widget.title)),
       ),
-      body: Stack(
-       children: [
-         Container(
-          decoration: BoxDecoration(
-            color: Colors.grey,
-          image: DecorationImage(
-            image: AssetImage("lib/assets/kisspng-barbell.png"),
-            fit: BoxFit.cover,
-          ),
-        )),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Spacer(flex:1),
-            Text(
-                "Power Log",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 64,
-                  color:  Colors.white,
-                  fontWeight: FontWeight.bold
-                ),
-            ),
-            Spacer(flex:1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: TextField(
-                    decoration: InputDecoration(
-                        hintStyle: TextStyle(fontSize: 20.0, color: Colors.white),
-                        border: OutlineInputBorder(),
-                        hintText: "Username",
-                        fillColor: Colors.blueGrey
-                    ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: double.infinity,
+        child: Stack(
+          children: [
+            Container(
+                decoration: BoxDecoration(
+              color: Colors.white,
+              image: DecorationImage(
+                  image: AssetImage("lib/assets/powerlog.png"),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.bottomCenter),
+            )),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Spacer(flex: 1),
+                  Spacer(flex: 1),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
+                    child: Text("Username",
+                        style: TextStyle(fontSize: 18.0, color: Colors.white)),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top:10),
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        hintStyle: TextStyle(fontSize: 20.0, color: Colors.white),
-                        border: OutlineInputBorder(),
-                        hintText: "Password",
-                        fillColor: Colors.blueGrey
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: TextField(
+                          decoration: InputDecoration(
+                              hintStyle: TextStyle(
+                                  fontSize: 20.0, color: Colors.white),
+                              border: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white)),
+                              hintText: "",
+                              fillColor: Colors.black38),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            Spacer(flex:1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: RaisedButton(
-                      color: Colors.deepOrangeAccent,
-                      textColor: Colors.white,
-                      child: Text("SIGN IN"),
-                      onPressed: _signIn,
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, bottom: 16.0, top: 16.0),
+                    child: Text("Password",
+                        style: TextStyle(fontSize: 18.0, color: Colors.white)),
                   ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  padding: EdgeInsets.all(10),
-                  child: InkWell(
-                      onTap: ()=> print("forgot"),
-                      child:Text(
-                        "Forgot Password?",
-                        textAlign: TextAlign.center,
-                      )
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: TextField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              hintStyle: TextStyle(
+                                  fontSize: 20.0, color: Colors.white),
+                              border: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white)),
+                              hintText: "",
+                              fillColor: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            Spacer(flex:2),
+                  Spacer(flex: 1),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        height: 60.0,
+                        child: RaisedButton(
+                          color: Colors.white,
+                          textColor: Colors.black54,
+                          child: Text("SIGN IN"),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.grey)),
+                          onPressed: _signIn,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.65,
+                        padding: EdgeInsets.all(16),
+                        child: InkWell(
+                            onTap: () => print("forgot"),
+                            child: Text("Forgot Password?",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 16.0))),
+                      ),
+                    ],
+                  ),
+                  Spacer(flex: 2),
+                ],
+              ),
+            )
           ],
-        )],
+        ),
       ),
     );
   }
 
-  void _signIn(){
+  void _signIn() {
     print("signing in..");
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
-
 }

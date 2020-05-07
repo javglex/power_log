@@ -42,6 +42,7 @@ class _WorkoutRecordDetail extends State<WorkoutRecordDetail> {
         textFieldName = workoutRecord.name;
         textFieldName = StringUtils.capitalize(textFieldName);
         textFieldDate = DateFormat('MMMM dd yyyy').format(DateTime.parse(workoutRecord.date));
+        print("WorkoutDetail recordate: "+ workoutRecord.date.toString());
       });
     }
 
@@ -72,73 +73,76 @@ class _WorkoutRecordDetail extends State<WorkoutRecordDetail> {
       appBar: AppBar(
         title: Text("Workout Details"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Card(
-              elevation: 8.0,
-              color: Colors.lightBlueAccent,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ListTile(
+      body: Column(
+        children: <Widget>[
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: const BorderRadius.only(
+                bottomLeft:Radius.circular(26.0),
+                bottomRight:Radius.circular(26.0),
+              ),
+            ),
+            elevation: 12.0,
+            color: Colors.blue[300],
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
 //                    leading: Icon(
 //                      Icons.lens,
 //                      color: Colors.blue,
 //                      size: 36.0,
 //                    ),
-                      title: Padding(
-                        padding: const EdgeInsets.only(bottom:8.0),
-                        child: Text(
-                            textFieldName,
-                            style: TextStyle(
-                                fontSize: 20.0, color: Colors.white)
-                        ),
-                      ),
-                      subtitle: Text(textFieldDate,
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom:8.0),
+                      child: Text(
+                          textFieldName,
                           style: TextStyle(
-                          fontSize: 16.0, color: Colors.white70)
+                              fontSize: 20.0, color: Colors.white)
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left:16.0, right: 8.0, top:16.0, bottom:16.0),
-                      child: Text("This is a sample note that the user may have input" + workoutRecord.notes,
-                          style: TextStyle(
-                              fontSize: 16.0, color: Colors.white)
-                      ),
-                    )
-                  ],
-                ),
+                    subtitle: Text(textFieldDate,
+                        style: TextStyle(
+                        fontSize: 16.0, color: Colors.white70)
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left:16.0, right: 8.0, top:16.0, bottom:16.0),
+                    child: Text("This is a sample note that the user may have input" + workoutRecord.notes,
+                        style: TextStyle(
+                            fontSize: 16.0, color: Colors.white)
+                    ),
+                  )
+                ],
               ),
             ),
-            Expanded(
-                child: exerciseRecords.length != 0
-                    ? ListView.builder(
-                  shrinkWrap: false,
-                  physics: ClampingScrollPhysics(),
-                  padding: const EdgeInsets.all(8.0),
-                  itemCount: exerciseRecords.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var recordid;
-                    if (exerciseRecords.length != 0)
-                      recordid = exerciseRecords[index].id;
+          ),
+          Expanded(
+              child: exerciseRecords.length != 0
+                  ? ListView.builder(
+                shrinkWrap: false,
+                physics: ClampingScrollPhysics(),
+                padding: const EdgeInsets.all(8.0),
+                itemCount: exerciseRecords.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var recordid;
+                  if (exerciseRecords.length != 0)
+                    recordid = exerciseRecords[index].id;
 
-                    return ExerciseRow(exerciseId: recordid);
+                  return ExerciseRow(exerciseId: recordid);
 
-                  },
-                )
-                    : Padding(
-                  padding: EdgeInsets.all(32.0),
-                  child: Text("No exercises recorded for this workout",
-                      style: TextStyle(
-                          fontSize: 24, color: Colors.black54)),
-                )
-            ),
-          ],
-        ),
+                },
+              )
+                  : Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Text("No exercises recorded for this workout",
+                    style: TextStyle(
+                        fontSize: 24, color: Colors.black54)),
+              )
+          ),
+        ],
       ),
     );
   }
