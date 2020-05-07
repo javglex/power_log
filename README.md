@@ -6,3 +6,12 @@ This logger is focused for power lifting workouts. That means adding, editing, o
 ## Getting Started
 
 WIP, download links will be available for testing purposes.
+
+![Image of Login]
+(https://github.com/javglex/images/blob/master/Screenshot_1588840202.png)
+
+![Image of Home Page]
+(https://github.com/javglex/images/blob/master/Screenshot_1588840280.png)
+
+![Image of Detail Screen]
+(https://github.com/javglex/images/blob/master/Screenshot_1588840287.png)
