@@ -30,8 +30,8 @@ class _RecordRow extends State<RecordRow> {
 
   @override
   void initState(){
-    workoutRecordService = WorkoutRecordService(context);
-    exerciseService = ExerciseService(context);
+    workoutRecordService = WorkoutRecordService();
+    exerciseService = ExerciseService();
 
     record = workoutRecordService.getWorkoutRecordById(widget.workoutId);
     if (record!=null && record.name!=null && record.date!=null) {

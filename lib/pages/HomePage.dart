@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState(){
-    workoutRecordService = WorkoutRecordService(context);
+    workoutRecordService = WorkoutRecordService();
     records = workoutRecordService.getWorkoutRecordsByDate(dateSelected.toIso8601String());
     super.initState();
   }

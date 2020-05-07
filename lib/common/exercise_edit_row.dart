@@ -28,7 +28,7 @@ class _ExerciseRow extends State<ExerciseEditRow> {
 
   @override
   void initState(){
-    exerciseService = ExerciseService(context);
+    exerciseService = ExerciseService();
     Exercise exercise = exerciseService.getExerciseById(widget.exerciseId);
     if (exercise!=null && exercise.description!=null)
       setState(() {

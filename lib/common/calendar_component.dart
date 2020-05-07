@@ -36,7 +36,7 @@ class _CalendarComponent extends State<CalendarComponent> with TickerProviderSta
   void initState() {
     super.initState();
     final _selectedDay = DateTime.now();
-    workoutService = WorkoutRecordService(context);
+    workoutService = WorkoutRecordService();
 
     _selectedEvents = _events[_selectedDay] ?? [];
     _calendarController = CalendarController();

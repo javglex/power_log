@@ -52,8 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState(){
     super.initState();
-    ExerciseRecordService exerciseService = ExerciseRecordService(context);
-    WorkoutRecordService workoutService = WorkoutRecordService(context);
+    ExerciseRecordService exerciseService = ExerciseRecordService();
+    WorkoutRecordService workoutService = WorkoutRecordService();
     MockWorkoutData mockData = MockWorkoutData();
     workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(10,20));
     exerciseService.addExerciseRecordsToList(mockData.fetchExerciseRecords());

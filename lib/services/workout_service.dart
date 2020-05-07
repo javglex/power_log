@@ -6,15 +6,13 @@ import 'package:power_log/models/WorkoutRecord.dart';
 class WorkoutRecordService{
 
   List<WorkoutRecord> _workoutRecordList;
-  BuildContext context;
 
   WorkoutRecordService._internal();
 
   static final WorkoutRecordService _instance = WorkoutRecordService._internal();
 
-  factory WorkoutRecordService(BuildContext ctx){
-    if (_instance.context==null) {
-      _instance.context = ctx;
+  factory WorkoutRecordService(){
+    if (_instance._workoutRecordList==null) {
       _instance._workoutRecordList = List<WorkoutRecord>();
     }
     return _instance;

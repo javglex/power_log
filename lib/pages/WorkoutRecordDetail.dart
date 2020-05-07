@@ -33,8 +33,8 @@ class _WorkoutRecordDetail extends State<WorkoutRecordDetail> {
 
   @override
   void initState(){
-    workoutRecordService = WorkoutRecordService(context);
-    exerciseRecordService = ExerciseRecordService(context);
+    workoutRecordService = WorkoutRecordService();
+    exerciseRecordService = ExerciseRecordService();
 
     workoutRecord = workoutRecordService.getWorkoutRecordById(widget.workoutId);
     if (workoutRecord!=null && workoutRecord.name!=null && workoutRecord.date!=null) {

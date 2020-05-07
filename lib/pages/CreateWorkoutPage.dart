@@ -33,8 +33,8 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   @override
   void initState() {
     dateTxtCtrl.text = DateFormat('MMMM dd yyyy').format(selectedDate);
-    exerciseRecordService = ExerciseRecordService(context);
-    workoutRecordService = WorkoutRecordService(context);
+    exerciseRecordService = ExerciseRecordService();
+    workoutRecordService = WorkoutRecordService();
 
     newWorkoutRecord = WorkoutRecord();
     _addTxtListeners();
@@ -234,6 +234,8 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   }
 
   _createExerciseHistories(){
+    if (selectedExercises==null)
+      return;
     for (int id in selectedExercises){
       ExerciseRecord exerciseRecord = new ExerciseRecord(workoutid: newWorkoutRecord.id,exerciseid: id );
       exerciseRecords.add(exerciseRecord);

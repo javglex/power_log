@@ -20,8 +20,8 @@ class _AddExercisePage extends State<AddExercisePage> {
 
   @override
   void initState() {
-    exerciseService = ExerciseService(context);
-    exerciseService.getExerciseList().then((val) => _finished(val));
+    exerciseService = ExerciseService();
+    exerciseService.getExerciseList(context).then((val) => _finished(val));
     super.initState();
   }
 
@@ -89,7 +89,9 @@ class _AddExercisePage extends State<AddExercisePage> {
   }
 
   void _sendList() {
+    print("addexercises page send list:");
     print(selectedExercises);
+    selectedExercises = selectedExercises==null?[]:selectedExercises;
     Navigator.pop(context, selectedExercises);
   }
 }

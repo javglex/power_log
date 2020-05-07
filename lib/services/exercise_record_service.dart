@@ -8,15 +8,13 @@ import 'package:power_log/models/ExerciseRecord.dart';
 class ExerciseRecordService{
 
   List<ExerciseRecord> _exerciseRecordList;
-  BuildContext context;
 
   ExerciseRecordService._internal();
 
   static final ExerciseRecordService _instance = ExerciseRecordService._internal();
 
-  factory ExerciseRecordService(BuildContext ctx){
-    if (_instance.context==null) {
-      _instance.context = ctx;
+  factory ExerciseRecordService(){
+    if (_instance._exerciseRecordList==null) {
       _instance._exerciseRecordList = List<ExerciseRecord>();
     }
     return _instance;

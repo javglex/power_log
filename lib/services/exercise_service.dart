@@ -13,15 +13,13 @@ import 'package:power_log/models/ExerciseRecord.dart';
 class ExerciseService{
 
   Map<String,List<Exercise>> _exerciseList;   //available exercises, by group
-  BuildContext context;
 
   ExerciseService._internal();
 
   static final ExerciseService _instance = ExerciseService._internal();
 
-  factory ExerciseService(BuildContext ctx){
-    if (_instance.context==null) {
-      _instance.context = ctx;
+  factory ExerciseService(){
+    if (_instance._exerciseList==null) {
       _instance._exerciseList = Map<String, List<Exercise>>();
     }
     return _instance;
@@ -29,7 +27,7 @@ class ExerciseService{
 
 
 
-  _loadExerciseJson() async {
+  _loadExerciseJson(BuildContext context) async {
 
     if (_exerciseList.values.length>0) //cached version already exists, abort loading
       return;
@@ -51,8 +49,8 @@ class ExerciseService{
 
   }
 
-  Future<Map<String, List<Exercise>>> getExerciseList() async{
-    await _loadExerciseJson();
+  Future<Map<String, List<Exercise>>> getExerciseList(BuildContext context) async{
+    await _loadExerciseJson(context);
     print("exercise service finished loading exercise json: " + _exerciseList.length.toString());
     return _exerciseList;
   }
