@@ -120,7 +120,7 @@ class _WorkoutRecordDetail extends State<WorkoutRecordDetail> {
             ),
           ),
           Expanded(
-              child: exerciseRecords.length != 0
+              child: (exerciseRecords!=null&&exerciseRecords.length != 0)
                   ? ListView.builder(
                 shrinkWrap: false,
                 physics: ClampingScrollPhysics(),
@@ -139,7 +139,7 @@ class _WorkoutRecordDetail extends State<WorkoutRecordDetail> {
                 padding: EdgeInsets.all(32.0),
                 child: Text("No exercises recorded for this workout",
                     style: TextStyle(
-                        fontSize: 24, color: Colors.black54)),
+                        fontSize: 24)),
               )
           ),
         ],

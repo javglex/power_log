@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:power_log/pages/HomePage.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:power_log/services/exercise_record_service.dart';
+import 'package:power_log/services/exercise_service.dart';
+import 'package:power_log/services/workout_service.dart';
+import 'package:power_log/testing/mock_create_data.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -43,6 +47,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  
+  
+  @override
+  void initState(){
+    super.initState();
+    ExerciseRecordService exerciseService = ExerciseRecordService(context);
+    WorkoutRecordService workoutService = WorkoutRecordService(context);
+    MockWorkoutData mockData = MockWorkoutData();
+    workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(10,20));
+    exerciseService.addExerciseRecordsToList(mockData.fetchExerciseRecords());
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

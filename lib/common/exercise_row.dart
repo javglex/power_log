@@ -30,7 +30,8 @@ class _ExerciseRow extends State<ExerciseRow> {
     if (exerciseRecord!=null && exerciseRecord.exerciseid!=null)
       setState(() {
         int id = exerciseRecord.exerciseid;
-        exerciseTextName = exerciseService.getExerciseById(id).description;
+        if(exerciseService.getExerciseById(id)!=null)
+          exerciseTextName = exerciseService.getExerciseById(id).description;
       });
 
     super.initState();

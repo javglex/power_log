@@ -61,6 +61,30 @@ class WorkoutRecordService{
     return null;
   }
 
+  Map<DateTime, List> groupWorkoutsByDate(){
+
+    Map<DateTime, List> workoutMap = Map<DateTime, List>();
+
+    for (WorkoutRecord record in _workoutRecordList){
+      DateTime recordDate = DateTime.parse(record.date);
+      recordDate = new DateTime(recordDate.year, recordDate.month, recordDate.day, 0, 0, 0);  //round off time
+      List<WorkoutRecord> list = [];
+
+      if (workoutMap.containsKey(recordDate)){
+        list = workoutMap[recordDate];
+        list.add(record);
+      } else {
+        list.add(record);
+      }
+
+      workoutMap[recordDate] = list;
+
+    }
+
+    return workoutMap;
+
+  }
+
   List<WorkoutRecord> getWorkoutRecordsByDate(String date){
     DateTime searchDateBeg = DateTime.parse(date);
     DateTime searchDateEnd = DateTime.parse(date);

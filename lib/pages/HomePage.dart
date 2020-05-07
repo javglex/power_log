@@ -26,11 +26,12 @@ class _HomePageState extends State<HomePage> {
 
   List<WorkoutRecord> records;
   WorkoutRecordService workoutRecordService;
-  DateTime dateSelected;
+  DateTime dateSelected = DateTime.now();
+
   @override
   void initState(){
     workoutRecordService = WorkoutRecordService(context);
-    records = workoutRecordService.getWorkoutRecordsByDate(DateTime.now().toIso8601String());
+    records = workoutRecordService.getWorkoutRecordsByDate(dateSelected.toIso8601String());
     super.initState();
   }
 
@@ -54,37 +55,31 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Workout Log"),
+          backgroundColor: Colors.transparent,
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text("Workout Logs"),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback),
-              Expanded(
-                  child: records.length != 0
-                      ? ListView.separated(
-                    key: Key(DateTime.now().toString()),
-                    shrinkWrap: false,
-                    physics: ClampingScrollPhysics(),
-                    padding: const EdgeInsets.all(8.0),
-                    itemCount: records.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final recordid = records[index]?.id;
-                      return RecordRow(workoutId: recordid);
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(color: Colors.grey,);
-                    },
-                  )
-                      : Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Text("No workouts on this day",
-                        style: TextStyle(
-                            fontSize: 24)),
-                  )
+        body: CustomScrollView(
+          key: Key(DateTime.now().toString()),
+          slivers: <Widget>[
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              pinned: false,
+              floating: true,
+              titleSpacing: 0,
+              elevation: 1.0,
+              backgroundColor: Colors.transparent,
+              expandedHeight: MediaQuery.of(context).size.height * 0.55 ,
+              flexibleSpace: FlexibleSpaceBar(
+                background: CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback),
               ),
-            ]
-          ),
+
+            ),
+            SliverList(
+                delegate: new SliverChildListDelegate(_buildList())
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: _createWorkoutPage,
@@ -92,6 +87,50 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.grey[300]
         )
     );
+  }
+
+  //          Column(
+//            children: [
+//              CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback),
+//              Expanded(
+//                  child: records.length != 0
+//                      ? ListView.separated(
+//                    key: Key(DateTime.now().toString()),
+//                    shrinkWrap: false,
+//                    physics: ClampingScrollPhysics(),
+//                    padding: const EdgeInsets.all(8.0),
+//                    itemCount: records.length,
+//                    itemBuilder: (BuildContext context, int index) {
+//                      final recordid = records[index]?.id;
+//                      return RecordRow(workoutId: recordid);
+//                    },
+//                    separatorBuilder: (context, index) {
+//                      return Divider(color: Colors.grey,);
+//                    },
+//                  )
+//                      : Padding(
+//                    padding: EdgeInsets.all(32.0),
+//                    child: Text("No workouts on this day",
+//                        style: TextStyle(
+//                            fontSize: 24)),
+//                  )
+//              ),
+//            ]
+//          ),
+
+  List _buildList() {
+    List<Widget> listItems = List();
+
+    for (int i = 0; i < records.length; i++) {
+      final recordid = records[i]?.id;
+      listItems.add(Column( children: [
+        RecordRow(workoutId: recordid),
+        (i!=records.length-1 )? Divider(color: Colors.grey): Divider(color: Colors.transparent)
+      ]));
+    }
+
+
+    return listItems;
   }
 
   Future<void> _createWorkoutPage() async {
