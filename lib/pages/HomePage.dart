@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
           key: Key(DateTime.now().toString()),
           slivers: <Widget>[
             SliverAppBar(
-              automaticallyImplyLeading: false,
+              automaticallyImplyLeading: true,
               pinned: false,
               floating: true,
               titleSpacing: 0,
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.transparent,
               expandedHeight: MediaQuery.of(context).size.height * 0.55 ,
               flexibleSpace: FlexibleSpaceBar(
-                background: CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback),
+                background: CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback, selectedDate: dateSelected),
               ),
 
             ),

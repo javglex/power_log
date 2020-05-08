@@ -17,8 +17,9 @@ class CalendarComponent extends StatefulWidget {
 
   final String title;
   final Function(DateTime) dateCallback;
+  final DateTime selectedDate;
 
-  CalendarComponent({Key key, this.title, this.dateCallback}) : super(key: key);
+  CalendarComponent({Key key, this.title, this.dateCallback, this.selectedDate}) : super(key: key);
 
   @override
   _CalendarComponent createState() => _CalendarComponent();
@@ -31,11 +32,11 @@ class _CalendarComponent extends State<CalendarComponent> with TickerProviderSta
   AnimationController _animationController;
   CalendarController _calendarController;
   WorkoutRecordService workoutService;
+  DateTime _selectedDay;
 
   @override
   void initState() {
     super.initState();
-    final _selectedDay = DateTime.now();
     workoutService = WorkoutRecordService();
 
     _selectedEvents = _events[_selectedDay] ?? [];
@@ -50,7 +51,11 @@ class _CalendarComponent extends State<CalendarComponent> with TickerProviderSta
 
     setState(() {
       _events = workoutService.groupWorkoutsByDate();
+      _selectedDay = widget.selectedDate==null?DateTime.now():widget.selectedDate;
+      print("calendar component init: "+_selectedDay.toIso8601String());
+
     });
+
   }
 
   @override
@@ -61,11 +66,13 @@ class _CalendarComponent extends State<CalendarComponent> with TickerProviderSta
   }
 
   void _onDaySelected(DateTime day, List events) {
-    print('CALLBACK: _onDaySelected');
+    print('CALLBACK: _onDaySelected' + day.toIso8601String());
+    if (events.length>0)
+      print("events "+  events[0].toString());
     setState(() {
       _selectedEvents = events;
+      _selectedDay=day;
       widget.dateCallback(day);
-
     });
 
   }
@@ -83,7 +90,10 @@ class _CalendarComponent extends State<CalendarComponent> with TickerProviderSta
 
   void _onCalendarCreated(DateTime first, DateTime last,
       CalendarFormat format) {
-    print('CALLBACK: _onCalendarCreated');
+
+    print('CALLBACK: _onCalendarCreated'+first.toIso8601String()+" "+last.toIso8601String());
+    _calendarController.setSelectedDay(_selectedDay);
+
   }
 
   @override

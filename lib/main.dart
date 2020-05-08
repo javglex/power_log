@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ExerciseRecordService exerciseService = ExerciseRecordService();
     WorkoutRecordService workoutService = WorkoutRecordService();
     MockWorkoutData mockData = MockWorkoutData();
-    workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(10,20));
+    workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(35,80));
     exerciseService.addExerciseRecordsToList(mockData.fetchExerciseRecords());
   }
   
@@ -103,7 +103,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               hintStyle: TextStyle(
                                   fontSize: 20.0, color: Colors.white),
                               border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white)),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8.0),
+                                    topRight: Radius.circular(8.0),
+                                ),
+                                  borderSide: BorderSide(color: Colors.white, width: 10.0)),
                               hintText: "",
                               fillColor: Colors.black38),
                         ),
