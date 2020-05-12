@@ -13,7 +13,8 @@ import 'package:power_log/models/ExerciseRecord.dart';
 class ExerciseService{
 
   Map<String,List<Exercise>> _exerciseList;   //available exercises, by group
-
+  Map<int, int> categoryMap = Map<int,int>();  //given an exercise id, stores a category value
+  
   ExerciseService._internal();
 
   static final ExerciseService _instance = ExerciseService._internal();
@@ -41,8 +42,11 @@ class ExerciseService{
       Exercises exercisesGroups = Exercises.fromJson(parsedJson,entry);
       List<Exercise> exercises = [];
 
-      for (Map<String,dynamic> json in exercisesGroups.group)
-        exercises.add(Exercise.fromJson(json));
+      for (Map<String,dynamic> json in exercisesGroups.groupedExercises) {
+        Exercise exercise = Exercise.fromJson(json);
+        exercises.add(exercise);
+        categoryMap[exercise.id]=exercise.categoryId;
+      }
 
       _exerciseList.addAll({entry.toString():exercises});
     }
@@ -66,6 +70,12 @@ class ExerciseService{
     }
 
     return null;
+  }
+  
+  int getExerciseCategory(int exerciseId){
+
+    return categoryMap[exerciseId];
+    
   }
 
 

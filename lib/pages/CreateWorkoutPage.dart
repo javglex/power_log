@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:power_log/common/exercise_edit_row.dart';
 import 'package:power_log/common/workout_edit_component.dart';
+import 'package:power_log/models/Exercise.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
 import 'package:power_log/models/WorkoutRecord.dart';
 import 'package:power_log/pages/AddExercisePage.dart';
@@ -27,6 +28,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   List<ExerciseRecord> exerciseRecords = [];
   ExerciseRecordService exerciseRecordService;
   WorkoutRecordService workoutRecordService;
+  ExerciseService exerciseService;
   WorkoutRecord newWorkoutRecord;
   DateTime selectedDate = DateTime.now();
   int colorSelectedHex;
@@ -36,6 +38,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   void initState() {
     exerciseRecordService = ExerciseRecordService();
     workoutRecordService = WorkoutRecordService();
+    exerciseService = ExerciseService();
 
     newWorkoutRecord = WorkoutRecord();
     _addTxtListeners();
@@ -99,13 +102,17 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
                           itemCount: exerciseRecords.length,
                           itemBuilder: (BuildContext context, int index) {
                             var recordid;
-                            if (exerciseRecords.length != 0)
+                            var categoryid;
+                            if (exerciseRecords.length != 0) {
                               recordid = exerciseRecords[index].exerciseid;
+                              categoryid = exerciseRecords[index].categoryid;
+                            }
 
                             return selectedExercises.length != 0
                                 ? ExerciseEditRow(
                                     exerciseId: recordid,
                                     workoutId: newWorkoutRecord.id,
+                                    categoryId: categoryid,
                                     callback: (record) =>
                                         _exerciseRecordAdded(record, index))
                                 : Text("Add some exercises");
@@ -199,8 +206,9 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   _createExerciseHistories() {
     if (selectedExercises == null) return;
     for (int id in selectedExercises) {
+      int categoryId = exerciseService.getExerciseCategory(id);
       ExerciseRecord exerciseRecord =
-          new ExerciseRecord(workoutid: newWorkoutRecord.id, exerciseid: id);
+          new ExerciseRecord(workoutid: newWorkoutRecord.id, exerciseid: id, categoryid: categoryId);
       exerciseRecords.add(exerciseRecord);
     }
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 /**
@@ -10,13 +11,14 @@ class ExerciseRecord{
   String id;
   String workoutid;
   int exerciseid;
+  int categoryid;
   int equipmentid;
   int bartypeid;
   int sets;
   int reps;
   int weight;
 
-  ExerciseRecord({this.workoutid,this.exerciseid,this.equipmentid,
+  ExerciseRecord({@required this.workoutid,@required this.exerciseid, @required this.categoryid, this.equipmentid,
     this.bartypeid,this.sets,this.reps,this.weight
   }){
 

@@ -23,13 +23,13 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepOrange,
           brightness: Brightness.light,
           hintColor: Colors.cyan),
-      home: MyHomePage(title: 'PowerLog'),
+      home: LoginPage(title: 'PowerLog'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -43,10 +43,10 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginPageState extends State<LoginPage> {
   
   
   @override
@@ -55,15 +55,16 @@ class _MyHomePageState extends State<MyHomePage> {
     ExerciseRecordService exerciseService = ExerciseRecordService();
     WorkoutRecordService workoutService = WorkoutRecordService();
     MockWorkoutData mockData = MockWorkoutData();
-    workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(35,80));
+    workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(context, 35,80));
     exerciseService.addExerciseRecordsToList(mockData.fetchExerciseRecords());
   }
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.deepOrange[800],
+        backgroundColor: Colors.grey[800].withOpacity(.5),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Center(child: Text(widget.title)),

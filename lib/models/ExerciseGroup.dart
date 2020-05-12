@@ -8,14 +8,14 @@ import 'Exercise.dart';
  */
 
 class Exercises {
-  final List<dynamic> group;
+  final List<dynamic> groupedExercises;
   final String groupName;
 
-  Exercises._({this.group, this.groupName});
+  Exercises._({this.groupedExercises, this.groupName});
 
   factory Exercises.fromJson(Map<String, dynamic> json, String name) {
     return new Exercises._(
-        group: json['exercises'][name],
+        groupedExercises: json['exercises'][name],
         groupName: name
     );
   }

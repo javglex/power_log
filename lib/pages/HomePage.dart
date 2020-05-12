@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:power_log/common/calendar_component.dart';
 import 'package:power_log/common/exercise_edit_row.dart';
 import 'package:power_log/common/wokrout_record_row.dart';
+import 'package:power_log/main.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
 import 'package:power_log/models/WorkoutRecord.dart';
+import 'package:power_log/pages/WorkoutInsightsPage.dart';
 import 'package:power_log/services/exercise_record_service.dart';
 import 'package:power_log/services/exercise_service.dart';
 import 'package:power_log/services/workout_service.dart';
@@ -54,12 +56,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text("Workout Logs"),
-        ),
+//        appBar: AppBar(
+//          backgroundColor: Colors.transparent,
+//          // Here we take the value from the MyHomePage object that was created by
+//          // the App.build method, and use it to set our appbar title.
+//          title: Text("Workout Logs"),
+//        ),
         body: CustomScrollView(
           key: Key(DateTime.now().toString()),
           slivers: <Widget>[
@@ -72,7 +74,10 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.transparent,
               expandedHeight: MediaQuery.of(context).size.height * 0.55 ,
               flexibleSpace: FlexibleSpaceBar(
-                background: CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback, selectedDate: dateSelected),
+                background: Padding(
+                  padding: const EdgeInsets.only(top:20.0),
+                  child: CalendarComponent(title: "TestCalendar", dateCallback: _dateCallback, selectedDate: dateSelected),
+                ),
               ),
 
             ),
@@ -85,7 +90,40 @@ class _HomePageState extends State<HomePage> {
             onPressed: _createWorkoutPage,
             child: Icon(Icons.note_add),
             backgroundColor: Colors.grey[300]
-        )
+        ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('Insights'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WorkoutInsightsPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Logout'),
+              onTap: () {
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                    MyApp()), (Route<dynamic> route) => false);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 

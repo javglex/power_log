@@ -8,10 +8,11 @@ class ExerciseEditRow extends StatefulWidget {
 
   final int exerciseId;
   final String workoutId;
+  final int categoryId;
   Function(ExerciseRecord) callback;
 
   ExerciseEditRow({Key key, @required this.exerciseId, @required this.workoutId,
-    @required this.callback}) : super(key: key);
+    @required this.categoryId, @required this.callback}) : super(key: key);
 
   @override
   _ExerciseRow createState() => _ExerciseRow();
@@ -39,7 +40,9 @@ class _ExerciseRow extends State<ExerciseEditRow> {
     repsEditingController.text = '0';
     weightEditingController.text = '0';
 
-    newExerciseRecord = ExerciseRecord(exerciseid: widget.exerciseId, workoutid: widget.workoutId);
+    newExerciseRecord = ExerciseRecord(exerciseid: widget.exerciseId,
+        workoutid: widget.workoutId, categoryid: widget.categoryId);
+    
     setsEditingController.addListener(_updateSets);
     repsEditingController.addListener(_updateReps);
     weightEditingController.addListener(_updateWeight);

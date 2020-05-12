@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
 import 'package:power_log/models/WorkoutRecord.dart';
+import 'package:power_log/services/exercise_service.dart';
 import 'package:uuid/uuid.dart';
 
 /**
@@ -51,6 +53,18 @@ class MockWorkoutData{
       record.exerciseid = next(min, max);
       record.workoutid = _workoutRecords.elementAt(next2(min2,max2)).id;
 
+      int min3 = 0;
+      int max3 = 4;
+      int next3(min3, max3) => min3 + _random.nextInt(max3 - min3);
+
+      record.categoryid = next3(min3,max3);
+
+      int min4 = 0;
+      int max4 = 400;
+      int next4(min4, max4) => min4 + _random.nextInt(max4 - min4);
+
+      record.weight = next4(min4, max4);
+
       _exerciseRecords.add(record);
     }
 
@@ -61,10 +75,12 @@ class MockWorkoutData{
    * size = size of workout list to generate
    * size2 = size of exercise list to generate
    */
-  List<WorkoutRecord> createAndFetchWorkouts(int size, int size2){
+  List<WorkoutRecord> createAndFetchWorkouts(BuildContext context, int size, int size2){
 
     _workoutRecords = [];
     _exerciseRecords = [];
+
+    ExerciseService().getExerciseList(context);
 
     _generateWorkoutRecords(size);
     if(_workoutRecords.length>0)
