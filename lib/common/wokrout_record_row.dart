@@ -65,7 +65,7 @@ class _RecordRow extends State<RecordRow> {
               padding: const EdgeInsets.only(right:20.0),
               child: Icon(
                 Icons.lens,
-                color: Colors.blue,
+                color: record.colorHex!=null?Color(record.colorHex):Colors.blue,
                 size: 36.0,
               ),
             ),

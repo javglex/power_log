@@ -9,10 +9,10 @@ class WorkoutRecord{
   String name;
   String date;
   String notes;
-  int symbolId; //icon that will show up in our calendar/list
+  int colorHex; //icon that will show up in our calendar/list
 
   WorkoutRecord(){
-    this.symbolId = 0;
+    this.colorHex = 4282557941;
     this.id = new Uuid().v1();
     this.notes = "";
   }

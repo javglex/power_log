@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:power_log/common/exercise_edit_row.dart';
+import 'package:power_log/common/workout_edit_component.dart';
 import 'package:power_log/models/ExerciseRecord.dart';
 import 'package:power_log/models/WorkoutRecord.dart';
 import 'package:power_log/pages/AddExercisePage.dart';
@@ -17,6 +18,7 @@ class CreateWorkoutPage extends StatefulWidget {
 class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   var dateTxtCtrl = TextEditingController();
   var nameTxtCtrl = TextEditingController();
+  var noteEditingCtrl = TextEditingController();
 
   static const padding_column_title = 24.0;
   static const body_padding = 18.0;
@@ -26,13 +28,12 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   ExerciseRecordService exerciseRecordService;
   WorkoutRecordService workoutRecordService;
   WorkoutRecord newWorkoutRecord;
-
   DateTime selectedDate = DateTime.now();
+  int colorSelectedHex;
   String workoutNameText = "";
 
   @override
   void initState() {
-    dateTxtCtrl.text = DateFormat('MMMM dd yyyy').format(selectedDate);
     exerciseRecordService = ExerciseRecordService();
     workoutRecordService = WorkoutRecordService();
 
@@ -42,12 +43,12 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
     super.initState();
   }
 
-  _addTxtListeners(){
+  _addTxtListeners() {
     nameTxtCtrl.addListener(_nameTxtChanged);
   }
 
-  _nameTxtChanged(){
-    workoutNameText =  nameTxtCtrl.text;
+  _nameTxtChanged() {
+    workoutNameText = nameTxtCtrl.text;
   }
 
   @override
@@ -67,89 +68,57 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
         ),
       ),
       body: Container(
-        height:double.infinity,
-        child: Padding(
-          padding: EdgeInsets.all(body_padding),
-          child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
-                  child: Text("Workout Name",
-                      style: TextStyle(fontSize: 18)),
+        height: double.infinity,
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft:Radius.circular(26.0),
+                    bottomRight:Radius.circular(26.0),
+                  ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width-body_padding*2,
-                      child: TextField(
-                        controller: nameTxtCtrl,
-                        decoration: InputDecoration(
-                            hintStyle:
-                                TextStyle(fontSize: 20.0),
-                            border: OutlineInputBorder(),
-                            hintText: "Workout name",
-                            fillColor: Colors.blueGrey),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
-                  child: Text("Date",
-                  style : TextStyle(fontSize: 18)),
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width-body_padding*2,
-                      child: TextFormField(
-                          controller: dateTxtCtrl,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                              hintStyle: TextStyle(
-                                  fontSize: 20.0),
-                              prefixIcon: Icon(Icons.calendar_today),
-                              border: OutlineInputBorder(),
-                              hintText: "Date",
-                              fillColor: Colors.blueGrey),
-                          onTap: () => _selectDate(context)),
-                    ),
-                  ],
-                ),
-                Expanded(
-                    child: selectedExercises != null && selectedExercises.length!=0
-                        ? ListView.builder(
-                            shrinkWrap: false,
-                            physics: ClampingScrollPhysics(),
-                            padding: const EdgeInsets.all(8.0),
-                            itemCount: exerciseRecords.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              var recordid;
-                              if (exerciseRecords.length != 0)
-                                recordid = exerciseRecords[index].exerciseid;
+                elevation: 12.0,
+                color: Colors.blue[300],
+                child: WorkoutEditComponent(nameTxtCtrl:nameTxtCtrl,
+                  dateTxtCtrl:dateTxtCtrl,
+                  dateCallback: _dateCallback,
+                  colorCallback: _colorCallback,
+                  noteEditingCtrl: noteEditingCtrl
+                )
+              ),
+              Expanded(
+                  child: selectedExercises != null &&
+                          selectedExercises.length != 0
+                      ? ListView.builder(
+                          shrinkWrap: false,
+                          physics: ClampingScrollPhysics(),
+                          padding: const EdgeInsets.all(8.0),
+                          itemCount: exerciseRecords.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var recordid;
+                            if (exerciseRecords.length != 0)
+                              recordid = exerciseRecords[index].exerciseid;
 
-                              return selectedExercises.length != 0
-                                  ? ExerciseEditRow(
-                                  exerciseId: recordid,
-                                  workoutId: newWorkoutRecord.id,
-                                  callback: (record)=> _exerciseRecordAdded(record,index)
-                              )
-                                  : Text("Add some exercises");
-                            },
-                          )
-                        : Padding(
-                            padding: EdgeInsets.all(32.0),
-                            child: Center(
-                              child: Text("Add some exercises",
-                                  style: TextStyle(
-                                      fontSize: 24)),
-                            ),
-                          )
-                ),
-              ]),
-        ),
+                            return selectedExercises.length != 0
+                                ? ExerciseEditRow(
+                                    exerciseId: recordid,
+                                    workoutId: newWorkoutRecord.id,
+                                    callback: (record) =>
+                                        _exerciseRecordAdded(record, index))
+                                : Text("Add some exercises");
+                          },
+                        )
+                      : Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: Center(
+                            child: Text("Add some exercises",
+                                style: TextStyle(fontSize: 24)),
+                          ),
+                        )),
+            ]),
       ),
       bottomNavigationBar: RaisedButton(
         color: Colors.deepOrange,
@@ -163,34 +132,25 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
-        onPressed: ()=>_finishAdding(context),
+        onPressed: () => _finishAdding(context),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: _addExercisePage,
           child: Icon(Icons.note_add),
-          backgroundColor: Colors.grey[300]
-      ),
+          backgroundColor: Colors.grey[300]),
     );
   }
 
-
-  Future<Null> _selectDate(BuildContext context) async {
-    FocusScope.of(context)
-        .requestFocus(new FocusNode()); //prevent keyboard from appearing
-
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        dateTxtCtrl.text = DateFormat('MMMM dd yyyy').format(selectedDate);
-      });
+  _colorCallback(ColorSwatch color){
+    print("create workout page color callback: "+ color[400].value.toString());
+    colorSelectedHex = color[400].value;
   }
 
-  _exerciseRecordAdded(ExerciseRecord record, int index){
+  _dateCallback(DateTime dateSelected){
+    selectedDate = dateSelected;
+  }
+
+  _exerciseRecordAdded(ExerciseRecord record, int index) {
     print("createworkoutpage added : ");
     print(record);
     print("with id: " + index.toString());
@@ -213,37 +173,41 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
     print(result);
   }
 
-  _finishAdding(BuildContext ctx){
-
-    if (exerciseRecords.length==0){
-      showAlertDialog(ctx,"No exercises","Add exercises before continuing");
+  _finishAdding(BuildContext ctx) {
+    if (exerciseRecords.length == 0) {
+      showAlertDialog(ctx, "No exercises", "Add exercises before continuing");
       return;
     }
 
     //update the exercise service with the finalized record edits
     exerciseRecordService.addExerciseRecordsToList(exerciseRecords);
-    
+
     newWorkoutRecord.date = selectedDate.toIso8601String();
-    if (workoutNameText.length>0 && workoutNameText!='')
+    if (colorSelectedHex!=null)
+      newWorkoutRecord.colorHex = colorSelectedHex;
+
+    if (workoutNameText.length > 0 && workoutNameText != '')
       newWorkoutRecord.name = workoutNameText.trim();
     else
-      newWorkoutRecord.name = 'Workout#' + DateTime.now().millisecondsSinceEpoch.toString().substring(9);
+      newWorkoutRecord.name = 'Workout#' +
+          DateTime.now().millisecondsSinceEpoch.toString().substring(9);
 
     workoutRecordService.addWorkoutRecordToList(newWorkoutRecord);
     Navigator.pop(context);
   }
 
-  _createExerciseHistories(){
-    if (selectedExercises==null)
-      return;
-    for (int id in selectedExercises){
-      ExerciseRecord exerciseRecord = new ExerciseRecord(workoutid: newWorkoutRecord.id,exerciseid: id );
+  _createExerciseHistories() {
+    if (selectedExercises == null) return;
+    for (int id in selectedExercises) {
+      ExerciseRecord exerciseRecord =
+          new ExerciseRecord(workoutid: newWorkoutRecord.id, exerciseid: id);
       exerciseRecords.add(exerciseRecord);
     }
   }
 
   // user defined function
-  Future<void> showAlertDialog(BuildContext ctx, final String message, final String subMessage) async {
+  Future<void> showAlertDialog(
+      BuildContext ctx, final String message, final String subMessage) async {
     // flutter defined function
     return showDialog<void>(
       context: ctx,

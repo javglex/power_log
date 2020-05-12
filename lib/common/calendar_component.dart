@@ -36,6 +36,7 @@ class _CalendarComponent extends State<CalendarComponent> with TickerProviderSta
 
   @override
   void initState() {
+
     super.initState();
     workoutService = WorkoutRecordService();
 
