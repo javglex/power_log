@@ -6,6 +6,7 @@ import 'package:fl_animated_linechart/common/pair.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fl_animated_linechart/fl_animated_linechart.dart';
+import 'package:power_log/constants/exercise_constants.dart';
 import 'package:power_log/services/workout_service.dart';
 import 'package:power_log/utils/ExerciseChartSeries.dart';
 import 'package:power_log/utils/fake_chart_series.dart';
@@ -22,36 +23,34 @@ class WorkoutInsightsPage extends StatefulWidget {
 class _WorkoutInsightsPage extends State<WorkoutInsightsPage> with FakeChartSeries, ExerciseChartSeries {
   int chartIndex = 0;
   Map<DateTime, List> workoutsbyDate;
+  SplayTreeMap<DateTime, double> exerciseMaxes;
 
 
   @override
   void initState(){
     super.initState();
     workoutsbyDate = WorkoutRecordService().groupWorkoutsByDate();
+    exerciseMaxes = exerciseMaxData(workoutsbyDate, MuscleGroups.BACK);
+
   }
 
   @override
   Widget build(BuildContext context) {
 
-
-    Map<DateTime, double> line1 = createLine2();
-    Map<DateTime, double> line2 = createLine2_2();
-    SplayTreeMap<DateTime, double> exerciseMaxes = exerciseMaxData(workoutsbyDate);
-
     LineChart chart;
 
     if (chartIndex == 0) {
       chart = LineChart.fromDateTimeMaps(
-          [exerciseMaxes], [Colors.green], ['lbs'],
+          [exerciseMaxes], [Colors.deepOrange], ['lbs'],
           tapTextFontWeight: FontWeight.w400);
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("OY"),
+        title: Text("Your Workout Insights"),
       ),
       body: Container(
-        color: Colors.white,
+        color: Colors.blueGrey,
         height: MediaQuery.of(context).size.height/2.0,
         child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -65,9 +64,29 @@ class _WorkoutInsightsPage extends State<WorkoutInsightsPage> with FakeChartSeri
                       chart,
                       key: UniqueKey(),
                     ), //Unique key to force animations
-                  )),
+                  )
+              ),
+              Row(
+                children: <Widget>[
+                  OutlineButton(child: Text("Back"), onPressed: _selectBack,),
+                  OutlineButton(child: Text("Legs"),onPressed: _selectLegs,)
+                ],
+              )
+
             ]),
       ),
     );
+  }
+
+  _selectBack(){
+    setState(() {
+      exerciseMaxes = exerciseMaxData(workoutsbyDate, MuscleGroups.BACK);
+    });
+  }
+
+  _selectLegs(){
+    setState(() {
+      exerciseMaxes = exerciseMaxData(workoutsbyDate, MuscleGroups.LEGS);
+    });
   }
 }

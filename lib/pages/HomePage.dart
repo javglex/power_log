@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               titleSpacing: 0,
               elevation: 1.0,
               backgroundColor: Colors.transparent,
-              expandedHeight: MediaQuery.of(context).size.height * 0.55 ,
+              expandedHeight: MediaQuery.of(context).size.height * 0.7 ,
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
                   padding: const EdgeInsets.only(top:20.0),
@@ -108,6 +108,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: Text('Insights'),
               onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => WorkoutInsightsPage()),

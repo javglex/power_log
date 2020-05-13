@@ -33,6 +33,7 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
   DateTime selectedDate = DateTime.now();
   int colorSelectedHex;
   String workoutNameText = "";
+  String workoutNoteText = "";
 
   @override
   void initState() {
@@ -48,11 +49,19 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
 
   _addTxtListeners() {
     nameTxtCtrl.addListener(_nameTxtChanged);
+    noteEditingCtrl.addListener(_noteTxtChanged);
   }
 
   _nameTxtChanged() {
     workoutNameText = nameTxtCtrl.text;
   }
+
+  _noteTxtChanged(){
+
+    workoutNoteText = noteEditingCtrl.text;
+
+  }
+
 
   @override
   void dispose() {
@@ -198,6 +207,9 @@ class _CreateWorkoutPage extends State<CreateWorkoutPage> {
     else
       newWorkoutRecord.name = 'Workout#' +
           DateTime.now().millisecondsSinceEpoch.toString().substring(9);
+
+    if (workoutNoteText.length > 0 && workoutNoteText != '')
+      newWorkoutRecord.notes = workoutNoteText.trim();
 
     workoutRecordService.addWorkoutRecordToList(newWorkoutRecord);
     Navigator.pop(context);

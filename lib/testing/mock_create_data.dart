@@ -22,8 +22,8 @@ class MockWorkoutData{
     for (int i = 0; i < size; i++){
       String name = 'Workout#' + DateTime.now().millisecondsSinceEpoch.toString().substring(9);
       final _random = new Random();
-      int min = -5;
-      int max = 4;
+      int min = -15;
+      int max = 15;
       int next(min, max) => min + _random.nextInt(max - min);
 
       String date = DateTime.now().add(Duration(days: next(min,max))).toIso8601String();
@@ -53,13 +53,13 @@ class MockWorkoutData{
       record.exerciseid = next(min, max);
       record.workoutid = _workoutRecords.elementAt(next2(min2,max2)).id;
 
-      int min3 = 0;
+      int min3 = 1;
       int max3 = 4;
       int next3(min3, max3) => min3 + _random.nextInt(max3 - min3);
 
       record.categoryid = next3(min3,max3);
 
-      int min4 = 0;
+      int min4 = 200;
       int max4 = 400;
       int next4(min4, max4) => min4 + _random.nextInt(max4 - min4);
 

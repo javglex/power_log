@@ -110,7 +110,7 @@ class _WorkoutRecordDetail extends State<WorkoutRecordDetail> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left:16.0, right: 8.0, top:16.0, bottom:16.0),
-                    child: Text("This is a sample note that the user may have input" + workoutRecord.notes,
+                    child: Text("This is a sample note that the user may have input: " + workoutRecord.notes,
                         style: TextStyle(
                             fontSize: 16.0, color: Colors.white)
                     ),

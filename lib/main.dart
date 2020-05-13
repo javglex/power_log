@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     ExerciseRecordService exerciseService = ExerciseRecordService();
     WorkoutRecordService workoutService = WorkoutRecordService();
     MockWorkoutData mockData = MockWorkoutData();
-    workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(context, 35,80));
+    workoutService.addWorkoutRecordsToList(mockData.createAndFetchWorkouts(context, 135,280));
     exerciseService.addExerciseRecordsToList(mockData.fetchExerciseRecords());
   }
   

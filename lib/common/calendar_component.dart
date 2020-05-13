@@ -108,7 +108,10 @@ class _CalendarComponent extends State<CalendarComponent> with TickerProviderSta
         ),
       ),
       color: Colors.blueGrey,
-      child: _buildTableCalendar(),
+      child: Padding(
+        padding: const EdgeInsets.only(top:24.0),
+        child: _buildTableCalendar(),
+      ),
     );
   }
 
